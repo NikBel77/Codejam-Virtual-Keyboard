@@ -18,5 +18,19 @@
   "homepage": "https://github.com/NikBel77/Codejam-Virtual-Keyboard#readme",
   "devDependencies": {
     "eslint": "^6.6.0"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "script",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "extends": "eslint:recommended",
+    "env": {
+      "browser": true,
+      "node": true
+    }
   }
 }
