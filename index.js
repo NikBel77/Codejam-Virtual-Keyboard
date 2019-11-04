@@ -155,28 +155,28 @@ function drawChar(lang, number) {
         let buttons = rows[i].childNodes
         switch(i) {
             case 0:
-                for (j = 0; j < firstRow[0].length; j++) {
+                for (let j = 0; j < firstRow[0].length; j++) {
                     buttons[j].innerHTML = `${String.fromCharCode(firstRow[number][j])}`;
                 }
                 break;
             case 1:
-                for (j = 0; j < secondRow[0].length; j++) {
+                for (let j = 0; j < secondRow[0].length; j++) {
                     buttons[j + 1].innerHTML = `${String.fromCharCode(secondRow[number][j])}`;
                 }
                 break;
             case 2:
-                for (j = 0; j < thirdRow[0].length; j++) {
+                for (let j = 0; j < thirdRow[0].length; j++) {
                     buttons[j + 1].innerHTML = `${String.fromCharCode(thirdRow[number][j])}`;
                 }
                 break;
             case 3:
-                for (j = 0; j < fourthRow[0].length; j++) {
+                for (let j = 0; j < fourthRow[0].length; j++) {
                     buttons[j + 1].innerHTML = `${String.fromCharCode(fourthRow[number][j])}`;
                 }
                 break;
         }
     }
-};
+}
 
 (function setEvent () {
     let current = document.querySelectorAll('.keyboard__row');
