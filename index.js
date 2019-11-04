@@ -181,12 +181,14 @@ function drawChar(lang, number) {
 (function setEvent () {
     let current = document.querySelectorAll('.keyboard__row');
     let buttons = [];
-
+    const textarea = document.querySelector('textarea');
     current.forEach((el) => {
         el.childNodes.forEach((el) => {
             buttons.push(el);
         });
     });
+
+    document.querySelector('.keyboard').addEventListener('mousedown', (e) => e.preventDefault());
     
     for (let el of buttons) {
         switch (el.getAttribute('data')) {
@@ -224,9 +226,36 @@ function drawChar(lang, number) {
                 });
                 break;
 
+            case 'ControlLeft':         
+            case 'MetaLeft':
+            case 'AltLeft':
+            case 'AltRight':
+            case 'ControlRight':
+            case 'Delete':
+            case 'ArrowUp':
+            case 'ArrowLeft':
+            case 'ArrowRight':
+            case 'ArrowDown':
+                el.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    el.classList.add('active');
+                });
+                el.addEventListener('mouseup', () => {
+                    el.classList.remove('active');
+                });
+                el.addEventListener('mouseout', () => {
+                    el.classList.remove('active');
+                });
+                break;
+
             default:
                 el.addEventListener('mousedown', (e) => {
                     e.preventDefault();
+                    if (el.getAttribute('data') === 'Enter') textarea.value += '\n';
+                    else if (el.getAttribute('data') === 'Backspace') textarea.value = textarea.value.slice(0, -1);
+                    else if (el.getAttribute('data') === 'Space') textarea.value += ' ';
+                    else if (el.getAttribute('data') === 'Tab') textarea.value += '\t';
+                    else textarea.value += el.innerHTML;
                     el.classList.add('active');
                 });
                 el.addEventListener('mouseup', () => {
@@ -242,39 +271,65 @@ function drawChar(lang, number) {
 (function setKeyEvent () {
     const body = document.querySelector('body');
     let elems = [];
+    const textarea = document.querySelector('textarea');
+    let current = document.querySelectorAll('.keyboard__row');
+    let buttons = [];
+
+    current.forEach((el) => {
+        el.childNodes.forEach((el) => {
+            buttons.push(el);
+        });
+    });
 
     body.addEventListener('keydown', (e) => {
         if (e.repeat) return;
         e.preventDefault();
 
-        let current = document.querySelectorAll('.keyboard__row');
-        let buttons = [];
-        current.forEach((el) => {
-            el.childNodes.forEach((el) => {
-                buttons.push(el);
-            });
-        });
         for(let el of buttons) {
             if (e.code === el.getAttribute('data')) {
+                switch (e.code) {
+                    case 'CapsLock':
+                        if(isCaps) {
+                            drawChar('', 0);
+                            isCaps = false;
+                        } else {
+                            drawChar('', 1);
+                            isCaps = true;
+                        }
+                        el.classList.toggle('active');
+                        break;
 
-                if (e.code === 'CapsLock') {
-                    if(isCaps) {
-                        drawChar('', 0);
-                        isCaps = false;
-                    } else {
-                        drawChar('', 1);
-                        isCaps = true;
-                    }
-                    el.classList.toggle('active');
+                    case 'ShiftRight':
+                    case 'ShiftLeft':
+                        isCaps ? drawChar('', 0) : drawChar('', 1);
+                        el.classList.add('active');
+                        elems.push(el);
+                        break;
 
-                } else if (e.code === 'ShiftRight' || e.code === 'ShiftLeft') {
-                    isCaps ? drawChar('', 0) : drawChar('', 1);
-                    el.classList.add('active');
-                    elems.push(el);
-                } else {
-                    elems.push(el);
-                    el.classList.add('active');
+                    case 'ControlLeft':
+                    case 'MetaLeft':
+                    case 'AltLeft':
+                    case 'AltRight':
+                    case 'ControlRight':
+                    case 'Delete':
+                    case 'ArrowUp':
+                    case 'ArrowLeft':
+                    case 'ArrowRight':
+                    case 'ArrowDown':
+                        elems.push(el);
+                        el.classList.add('active');
+                        break;
+                    
+                    default:
+                        if (el.getAttribute('data') === 'Enter') textarea.value += '\n';
+                        else if (el.getAttribute('data') === 'Backspace') textarea.value = textarea.value.slice(0, -1);
+                        else if (el.getAttribute('data') === 'Space') textarea.value += ' ';
+                        else if (el.getAttribute('data') === 'Tab') textarea.value += '\t';
+                        else  textarea.value += el.innerHTML;
+                        elems.push(el);
+                        el.classList.add('active');
                 }
+                break;
             }
         }
     });
