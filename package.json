@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/NikBel77/Codejam-Virtual-Keyboard#readme",
   "devDependencies": {
-    "eslint": "^6.6.0"
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2"
   },
   "eslintConfig": {
     "parserOptions": {
@@ -27,7 +29,7 @@
         "jsx": true
       }
     },
-    "extends": "eslint:recommended",
+    "extends": "airbnb-base",
     "env": {
       "browser": true,
       "node": true
