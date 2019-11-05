@@ -34,7 +34,12 @@ const rus = {
     [1071, 1063, 1057, 1052, 1048, 1058, 1068, 1041, 1070, 44],
   ],
 };
-let isCaps = false;
+
+(function localStorageSet() {
+  if (!localStorage.lang) {
+    localStorage.lang = 'eng';
+  }
+}());
 
 function drawChar(number, change) {
   const rows = document.querySelectorAll('.keyboard__row');
@@ -74,12 +79,16 @@ function drawChar(number, change) {
     }
   }
 }
-
-(function localStorageSet() {
-  if (!localStorage.lang) {
-    localStorage.lang = 'eng';
+let isCaps = false;
+function changeCaps() {
+  if (isCaps) {
+    drawChar(0, false);
+    isCaps = false;
+  } else {
+    drawChar(1, false);
+    isCaps = true;
   }
-}());
+}
 
 // Textarea
 (function generateTextarea() {
@@ -215,6 +224,7 @@ function drawChar(number, change) {
   const current = document.querySelectorAll('.keyboard__row');
   const buttons = [];
   const textarea = document.querySelector('textarea');
+
   current.forEach((el) => {
     el.childNodes.forEach((elem) => {
       buttons.push(elem);
@@ -223,38 +233,35 @@ function drawChar(number, change) {
 
   document.querySelector('.keyboard').addEventListener('mousedown', (e) => e.preventDefault());
 
-  for (const el of buttons) {
-    switch (el.getAttribute('data')) {
+  for (let i = 0; i < buttons.length; i += 1) {
+    switch (buttons[i].getAttribute('data')) {
       case 'CapsLock':
-        el.addEventListener('mousedown', (e) => {
+        buttons[i].addEventListener('mousedown', (e) => {
           e.preventDefault();
         });
-        el.addEventListener('click', () => {
-          el.classList.toggle('active');
-          if (isCaps) {
-            drawChar(0, false);
-            isCaps = false;
-          } else {
-            drawChar(1, false);
-            isCaps = true;
-          }
+        buttons[i].addEventListener('click', () => {
+          buttons[i].classList.toggle('active');
+          changeCaps();
         });
         break;
 
       case 'ShiftLeft':
       case 'ShiftRight':
-        el.addEventListener('mousedown', (e) => {
+        buttons[i].addEventListener('mousedown', (e) => {
           e.preventDefault();
-          el.classList.add('active');
-          isCaps ? drawChar(0, false) : drawChar(1, false);
+          buttons[i].classList.add('active');
+          changeCaps();
         });
-        el.addEventListener('mouseup', () => {
-          el.classList.remove('active');
-          isCaps ? drawChar(1, false) : drawChar(0, false);
+        buttons[i].addEventListener('mouseup', () => {
+          buttons[i].classList.remove('active');
+          changeCaps();
         });
-        el.addEventListener('mouseout', () => {
-          el.classList.remove('active');
-          isCaps ? drawChar(1, false) : drawChar(0, false);
+        buttons[i].addEventListener('mouseout', (e) => {
+          if (e.shiftKey) return;
+          if (buttons[i].classList.contains('active')) {
+            buttons[i].classList.remove('active');
+            changeCaps();
+          }
         });
         break;
 
@@ -268,33 +275,33 @@ function drawChar(number, change) {
       case 'ArrowLeft':
       case 'ArrowRight':
       case 'ArrowDown':
-        el.addEventListener('mousedown', (e) => {
+        buttons[i].addEventListener('mousedown', (e) => {
           e.preventDefault();
-          el.classList.add('active');
+          buttons[i].classList.add('active');
         });
-        el.addEventListener('mouseup', () => {
-          el.classList.remove('active');
+        buttons[i].addEventListener('mouseup', () => {
+          buttons[i].classList.remove('active');
         });
-        el.addEventListener('mouseout', () => {
-          el.classList.remove('active');
+        buttons[i].addEventListener('mouseout', () => {
+          buttons[i].classList.remove('active');
         });
         break;
 
       default:
-        el.addEventListener('mousedown', (e) => {
+        buttons[i].addEventListener('mousedown', (e) => {
           e.preventDefault();
-          if (el.getAttribute('data') === 'Enter') textarea.value += '\n';
-          else if (el.getAttribute('data') === 'Backspace') textarea.value = textarea.value.slice(0, -1);
-          else if (el.getAttribute('data') === 'Space') textarea.value += ' ';
-          else if (el.getAttribute('data') === 'Tab') textarea.value += '\t';
-          else textarea.value += el.innerHTML;
-          el.classList.add('active');
+          if (buttons[i].getAttribute('data') === 'Enter') textarea.value += '\n';
+          else if (buttons[i].getAttribute('data') === 'Backspace') textarea.value = textarea.value.slice(0, -1);
+          else if (buttons[i].getAttribute('data') === 'Space') textarea.value += ' ';
+          else if (buttons[i].getAttribute('data') === 'Tab') textarea.value += '\t';
+          else textarea.value += buttons[i].innerHTML;
+          buttons[i].classList.add('active');
         });
-        el.addEventListener('mouseup', () => {
-          el.classList.remove('active');
+        buttons[i].addEventListener('mouseup', () => {
+          buttons[i].classList.remove('active');
         });
-        el.addEventListener('mouseout', () => {
-          el.classList.remove('active');
+        buttons[i].addEventListener('mouseout', () => {
+          buttons[i].classList.remove('active');
         });
     }
   }
@@ -308,37 +315,32 @@ function drawChar(number, change) {
   const buttons = [];
 
   current.forEach((el) => {
-    el.childNodes.forEach((el) => {
-      buttons.push(el);
+    el.childNodes.forEach((elem) => {
+      buttons.push(elem);
     });
   });
 
   body.addEventListener('keydown', (e) => {
     if (e.repeat && e.code !== 'Backspace') return;
     if ((e.altKey && e.ctrlKey) && (e.code === 'AltLeft' || e.code === 'ControlLeft')) {
-      isCaps ? drawChar(1, true) : drawChar(0, true);
+      if (isCaps) drawChar(1, true);
+      else drawChar(0, true);
     }
     e.preventDefault();
 
-    for (const el of buttons) {
-      if (e.code === el.getAttribute('data')) {
+    for (let i = 0; i < buttons.length; i += 1) {
+      if (e.code === buttons[i].getAttribute('data')) {
         switch (e.code) {
           case 'CapsLock':
-            if (isCaps) {
-              drawChar(0, false);
-              isCaps = false;
-            } else {
-              drawChar(1, false);
-              isCaps = true;
-            }
-            el.classList.toggle('active');
+            changeCaps();
+            buttons[i].classList.toggle('active');
             break;
 
           case 'ShiftRight':
           case 'ShiftLeft':
-            isCaps ? drawChar(0, false) : drawChar(1, false);
-            el.classList.add('active');
-            elems.push(el);
+            changeCaps();
+            buttons[i].classList.add('active');
+            elems.push(buttons[i]);
             break;
 
           case 'ControlLeft':
@@ -351,18 +353,18 @@ function drawChar(number, change) {
           case 'ArrowLeft':
           case 'ArrowRight':
           case 'ArrowDown':
-            elems.push(el);
-            el.classList.add('active');
+            elems.push(buttons[i]);
+            buttons[i].classList.add('active');
             break;
 
           default:
-            if (el.getAttribute('data') === 'Enter') textarea.value += '\n';
-            else if (el.getAttribute('data') === 'Backspace') textarea.value = textarea.value.slice(0, -1);
-            else if (el.getAttribute('data') === 'Space') textarea.value += ' ';
-            else if (el.getAttribute('data') === 'Tab') textarea.value += '\t';
-            else textarea.value += el.innerHTML;
-            elems.push(el);
-            el.classList.add('active');
+            if (buttons[i].getAttribute('data') === 'Enter') textarea.value += '\n';
+            else if (buttons[i].getAttribute('data') === 'Backspace') textarea.value = textarea.value.slice(0, -1);
+            else if (buttons[i].getAttribute('data') === 'Space') textarea.value += ' ';
+            else if (buttons[i].getAttribute('data') === 'Tab') textarea.value += '\t';
+            else textarea.value += buttons[i].innerHTML;
+            elems.push(buttons[i]);
+            buttons[i].classList.add('active');
         }
         break;
       }
@@ -373,7 +375,7 @@ function drawChar(number, change) {
     const el = elems.pop();
 
     if (el.getAttribute('data') === 'ShiftRight' || el.getAttribute('data') === 'ShiftLeft') {
-      isCaps ? drawChar(1, false) : drawChar(0, false);
+      changeCaps();
       el.classList.remove('active');
       return;
     }
