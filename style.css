@@ -1,0 +1,148 @@
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4px;
+    border: 1px solid #00332c;
+    border-radius: 4px;
+    background-color: 	#1E786C;
+    font-family: sans-serif;
+    color: white;
+}
+
+.keyboard__row {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+}
+
+.text-area {
+    width: 500px;
+    height: 200px;
+    margin: 20px 0;
+}
+
+.box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.key {
+    background-color: #00A08A;
+    height: 30px;
+    width: 30px;
+    margin: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: .1s ease;
+}
+.key:hover {
+    background-color: #00332c;
+}
+
+.system-key-xsm {
+    background-color: #00685A;
+    height: 30px;
+    width: 30px;
+    margin: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+    color: #6db8ae;
+    cursor: pointer;
+    transition: .1s ease;
+}
+.system-key-xsm:hover {
+    background-color: #00332c;
+}
+
+.system-key-sm {
+    background-color: #00685A;
+    height: 30px;
+    width: 37px;
+    margin: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+    color: #6db8ae;
+    cursor: pointer;
+    transition: .1s ease;
+}
+.system-key-sm:hover {
+    background-color: #00332c;
+}
+
+.system-key-md {
+    background-color: #00685A;
+    height: 30px;
+    width: 48px;
+    margin: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+    color: #6db8ae;
+    cursor: pointer;
+    transition: .1s ease;
+}
+.system-key-md:hover {
+    background-color: #00332c;
+}
+
+.system-key-lg {
+    background-color: #00685A;
+    height: 30px;
+    width: 85px;
+    margin: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+    color: #6db8ae;
+    cursor: pointer;
+    transition: .1s ease;
+}
+.system-key-lg:hover {
+    background-color: #00332c;
+}
+
+.system-key-back {
+    background-color: #00685A;
+    height: 30px;
+    width: 100px;
+    margin: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2px;
+    color: #6db8ae;
+    cursor: pointer;
+    transition: .1s ease;
+}
+.system-key-back:hover {
+    background-color: #00332c;
+}
+
+.space {
+    background-color: #00685A;
+    width: 238px;
+    height: 30px;
+    margin: 4px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: .1s ease;
+}
+.space:hover {
+    background-color: #00332c;
+}
+
+.active {
+    background-color: #FF6A00 !important;
+    color: #00685A !important;
+}
