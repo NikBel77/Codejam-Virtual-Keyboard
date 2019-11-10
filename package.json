@@ -24,10 +24,7 @@
   "eslintConfig": {
     "parserOptions": {
       "ecmaVersion": 6,
-      "sourceType": "script",
-      "ecmaFeatures": {
-        "jsx": true
-      }
+      "sourceType": "script"
     },
     "extends": "airbnb-base",
     "env": {
